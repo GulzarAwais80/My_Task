@@ -28,9 +28,9 @@ public class Level_Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(this.gameObject.activeInHierarchy)
+        if (this.gameObject.activeInHierarchy)
         {
-             Instance = this;
+            Instance = this;
         }
         else
         {
@@ -46,7 +46,7 @@ public class Level_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(ShareValues.match_No >= Targeted_Match_Count)
+        if (ShareValues.match_No >= Targeted_Match_Count)
         {
             Targeted_Match_Count = 0;
             GameManager.GetComponent<GameManager>().Level_Complete();
@@ -54,23 +54,23 @@ public class Level_Manager : MonoBehaviour
     }
     IEnumerator Cover_Images_On()
     {
-        if(ShareValues.Next_Btn == 1)
+        if (ShareValues.Next_Btn == 1)
         {
-            yield return new WaitForSeconds(2.9f);
+            yield return new WaitForSeconds(3.1f);
             ShareValues.Next_Btn = 0;
         }
         else
         {
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitForSeconds(1.2f);
         }
-        for (int i = 0; i< Cover_Images.Length; i++)
+        for (int i = 0; i < Cover_Images.Length; i++)
         {
             Cover_Images[i].SetActive(true);
         }
     }
     public void Button_Clicked(string Id)
     {
-        if(ShareValues.Next_Turn == true )
+        if (ShareValues.Next_Turn == true)
         {
             MainAudio.PlayOneShot(Flip);
             if (ShareValues.State == 0)
@@ -82,7 +82,7 @@ public class Level_Manager : MonoBehaviour
                 ShareValues.State = 1;
                 StartCoroutine(Off_First_Game_Object());
             }
-           else if (ShareValues.State == 1)
+            else if (ShareValues.State == 1)
             {
                 ShareValues.State = 2;
                 ShareValues.Next_Turn = false;
@@ -95,9 +95,9 @@ public class Level_Manager : MonoBehaviour
         }
         else
         {
-            Debug.Log("editos");
+            Debug.Log("Dont Do Please");
         }
-        
+
     }
     IEnumerator Off_First_Game_Object()
     {
@@ -110,7 +110,7 @@ public class Level_Manager : MonoBehaviour
         yield return new WaitForSeconds(0.92f);
         Selected_btn2.gameObject.GetComponent<Animator>().enabled = false;
         Selected_btn2.gameObject.GetComponent<Image>().enabled = false;
-        
+
         if (SaveId_2 == SaveId)
         {
             Debug.Log("Con");
@@ -134,14 +134,12 @@ public class Level_Manager : MonoBehaviour
         Selected_btn2.gameObject.GetComponent<Button>().interactable = true;
 
         ShareValues.State = 0;
-   //     yield return new WaitForSeconds(0.1f);
         ShareValues.Next_Turn = true;
     }
     IEnumerator For_Off_Completed_Objects()
     {
         yield return new WaitForSeconds(0.4f);
         MainAudio.PlayOneShot(Matching);
-
         ShareValues.Turn_No++;
         Turns_no_text.text = "Turns: " + ShareValues.Turn_No.ToString();
         ShareValues.match_No++;
@@ -149,17 +147,11 @@ public class Level_Manager : MonoBehaviour
         Selected_btn1.gameObject.transform.parent.gameObject.SetActive(false);
         Selected_btn2.gameObject.transform.parent.gameObject.SetActive(false);
         ShareValues.State = 0;
-      //  yield return new WaitForSeconds(0.1f);
+        //  yield return new WaitForSeconds(0.1f);
         ShareValues.Next_Turn = true;
     }
     private void OnDisable()
     {
         Instance = null;
     }
-}
-
-
-
-
-
-   
+}  

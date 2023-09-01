@@ -48,7 +48,9 @@ public class GameManager : MonoBehaviour
         ShareValues.match_No = 0;
         ShareValues.Turn_No = 0;
         ShareValues.State = 0;
-        PlayerPrefs.SetInt("Score", 50);
+        int a = PlayerPrefs.GetInt("Score");
+        a += 50;
+        PlayerPrefs.SetInt("Score", a);
         SceneManager.LoadScene(0);
     }
 
