@@ -10,23 +10,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public GameObject Level_Complete_Panel;
     public Text Level_no;
+    public Text Score_Text;
     public GameObject[] Levels;
     // Start is called before the first frame update
     void Start()
     {
         Instance = this;
-        int level_For_Text = 0;
+        int level_For_Text = PlayerPrefs.GetInt("Level_no", 0);
         level_For_Text++;
         Level_no.text = "Level_No: " + level_For_Text;
         Select_Level();
         Levels[PlayerPrefs.GetInt("Level_no", 0)].SetActive(true);
+        Score_Text.text = "Score_Text: " + PlayerPrefs.GetInt("Score", 0);
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
     public void Select_Level()
     {
         for (int i = 0; i < Levels.Length; i++)
@@ -51,6 +48,9 @@ public class GameManager : MonoBehaviour
         ShareValues.match_No = 0;
         ShareValues.Turn_No = 0;
         ShareValues.State = 0;
+        PlayerPrefs.SetInt("Score", 50);
         SceneManager.LoadScene(0);
     }
+
+
 }  

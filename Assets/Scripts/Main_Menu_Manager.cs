@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Main_Menu_Manager : MonoBehaviour
 {
@@ -8,20 +9,12 @@ public class Main_Menu_Manager : MonoBehaviour
     public GameObject Very_Soon_Panel;
     public AudioClip Click;
     public AudioSource MainAudio;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Text Score_Text;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnEnable()
     {
-        if(ShareValues.Next_Btn == 1)
+        Score_Text.text = "Score_Text: " + PlayerPrefs.GetInt("Score", 0);
+        if (ShareValues.Next_Btn == 1)
         {
             Easy_Mode();
         }

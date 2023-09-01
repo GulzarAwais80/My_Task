@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class Level_Manager : MonoBehaviour
 {
-    public AudioClip Click;
+    public AudioClip Click, Flip, Matching, MisMatch;
     public AudioSource MainAudio;
     string SaveId;
+    string SaveId_2;
+
     public Text Match_no_text;
     public Text Turns_no_text;
     public static Level_Manager Instance;
@@ -46,6 +48,7 @@ public class Level_Manager : MonoBehaviour
     {
         if(ShareValues.match_No >= Targeted_Match_Count)
         {
+            Targeted_Match_Count = 0;
             GameManager.GetComponent<GameManager>().Level_Complete();
         }
     }
@@ -67,42 +70,78 @@ public class Level_Manager : MonoBehaviour
     }
     public void Button_Clicked(string Id)
     {
-        MainAudio.PlayOneShot(Click);
-
-        if (ShareValues.State == 0)
+        if(ShareValues.Next_Turn == true )
         {
-            SaveId = Id;
-            Selected_btn1.gameObject.GetComponent<Image>().enabled = false;
+            MainAudio.PlayOneShot(Flip);
+            if (ShareValues.State == 0)
+            {
+                SaveId = Id;
+                Selected_btn1.gameObject.GetComponent<Animator>().enabled = true;
+                Selected_btn1.gameObject.GetComponent<Button>().interactable = false;
+
+                ShareValues.State = 1;
+                StartCoroutine(Off_First_Game_Object());
+            }
+           else if (ShareValues.State == 1)
+            {
+                ShareValues.State = 2;
+                ShareValues.Next_Turn = false;
+                SaveId_2 = Id;
+                Selected_btn2.gameObject.GetComponent<Animator>().enabled = true;
+                Selected_btn2.gameObject.GetComponent<Button>().interactable = false;
+
+                StartCoroutine(Off_Second_Game_Object());
+            }
         }
-        ShareValues.State++;
-        if(ShareValues.State > 1)
+        else
         {
-            Selected_btn2.gameObject.GetComponent<Image>().enabled = false;
-
-            if (Id == SaveId)
-            {
-                Debug.LogError("Con");
-                StartCoroutine(For_Off_Completed_Objects());
-            }
-            else
-            {
-                ShareValues.Turn_No++;
-                Turns_no_text.text = "Turns: " + ShareValues.Turn_No.ToString();
-                Debug.LogError("no Con");
-                StartCoroutine(For_States());
-            }
+            Debug.Log("editos");
+        }
+        
+    }
+    IEnumerator Off_First_Game_Object()
+    {
+        yield return new WaitForSeconds(0.92f);
+        Selected_btn1.gameObject.GetComponent<Animator>().enabled = false;
+        Selected_btn1.gameObject.GetComponent<Image>().enabled = false;
+    }
+    IEnumerator Off_Second_Game_Object()
+    {
+        yield return new WaitForSeconds(0.92f);
+        Selected_btn2.gameObject.GetComponent<Animator>().enabled = false;
+        Selected_btn2.gameObject.GetComponent<Image>().enabled = false;
+        
+        if (SaveId_2 == SaveId)
+        {
+            Debug.Log("Con");
+            StartCoroutine(For_Off_Completed_Objects());
+        }
+        else
+        {
+            ShareValues.Turn_No++;
+            Turns_no_text.text = "Turns: " + ShareValues.Turn_No.ToString();
+            Debug.Log("no Con");
+            StartCoroutine(For_States());
         }
     }
     IEnumerator For_States()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
+        MainAudio.PlayOneShot(MisMatch);
         Selected_btn1.gameObject.GetComponent<Image>().enabled = true;
         Selected_btn2.gameObject.GetComponent<Image>().enabled = true;
+        Selected_btn1.gameObject.GetComponent<Button>().interactable = true;
+        Selected_btn2.gameObject.GetComponent<Button>().interactable = true;
+
         ShareValues.State = 0;
+   //     yield return new WaitForSeconds(0.1f);
+        ShareValues.Next_Turn = true;
     }
     IEnumerator For_Off_Completed_Objects()
     {
         yield return new WaitForSeconds(0.4f);
+        MainAudio.PlayOneShot(Matching);
+
         ShareValues.Turn_No++;
         Turns_no_text.text = "Turns: " + ShareValues.Turn_No.ToString();
         ShareValues.match_No++;
@@ -110,12 +149,15 @@ public class Level_Manager : MonoBehaviour
         Selected_btn1.gameObject.transform.parent.gameObject.SetActive(false);
         Selected_btn2.gameObject.transform.parent.gameObject.SetActive(false);
         ShareValues.State = 0;
+      //  yield return new WaitForSeconds(0.1f);
+        ShareValues.Next_Turn = true;
     }
     private void OnDisable()
     {
         Instance = null;
     }
 }
+
 
 
 

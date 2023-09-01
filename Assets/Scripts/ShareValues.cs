@@ -8,4 +8,6 @@ public class ShareValues : MonoBehaviour
     public static int Turn_No;
     public static int State;
     public static int Next_Btn = 0;
+    public static bool Next_Turn = true;
 }
+   

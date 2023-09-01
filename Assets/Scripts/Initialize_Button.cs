@@ -10,7 +10,7 @@ public class Initialize_Button : MonoBehaviour
         {
             Level_Manager.Instance.Selected_btn1 = this.gameObject;
         }
-        else
+        else if(ShareValues.State == 1)
         {
             Level_Manager.Instance.Selected_btn2 = this.gameObject;
         }
